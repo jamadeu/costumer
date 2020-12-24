@@ -1,6 +1,6 @@
 <h1 align="center">ECOMMERCE</h1>
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jamadeu/ecommerce/Java%20CI)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jamadeu/costumer/Costumer%20CI)
 
 ## Sobre
 
