@@ -15,4 +15,8 @@ public class CostumerService {
     public Optional<Costumer> findByEmail(String email) {
         return costumerRepository.findByEmail(email);
     }
+
+    public Optional<Costumer> findByCpf(String cpf) {
+        return costumerRepository.findByCpf(cpf);
+    }
 }

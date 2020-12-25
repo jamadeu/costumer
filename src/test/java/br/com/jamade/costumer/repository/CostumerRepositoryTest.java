@@ -31,7 +31,29 @@ class CostumerRepositoryTest {
     @Test
     @DisplayName("findByEmail returns an empty optional when costumer is not found")
     void findByEmail_ReturnsAnEmptyOptional_WhenCostumerIsNotFound() {
-        Optional<Costumer> optionalCostumer = costumerRepository.findByEmail("costumer not found");
+        Optional<Costumer> optionalCostumer = costumerRepository.findByEmail("costumer not exists");
+
+        Assertions.assertThat(optionalCostumer)
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("findByCpf returns an optional of costumer when successful")
+    void findByCpf_ReturnsAnOptionalOfCostumer_WhenSuccessful() {
+        Costumer costumer = costumerRepository.save(CostumerCreator.createValidCostumer());
+        Optional<Costumer> optionalCostumer = costumerRepository.findByCpf(costumer.getCpf());
+
+        Assertions.assertThat(optionalCostumer)
+                .isNotNull()
+                .isNotEmpty()
+                .contains(costumer);
+    }
+
+    @Test
+    @DisplayName("findByCpf returns an empty optional when costumer is not found")
+    void findByCpf_ReturnsAnEmptyOptional_WhenCostumerIsNotFound() {
+        Optional<Costumer> optionalCostumer = costumerRepository.findByCpf("costumer not exists");
 
         Assertions.assertThat(optionalCostumer)
                 .isNotNull()
