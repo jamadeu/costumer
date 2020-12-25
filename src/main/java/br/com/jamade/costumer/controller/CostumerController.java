@@ -30,14 +30,14 @@ public class CostumerController {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "400", description = "When costumer does not found")
     })
-    public ResponseEntity<?> findByEmail(@PathVariable String email) {
+    public ResponseEntity<Costumer> findByEmail(@PathVariable String email) {
         if (email == null) {
             throw new BadRequestException("Email can not be null");
         }
-        Optional<Costumer> costumer = costumerService.findByEmail(email);
-        if (costumer.isEmpty()) {
+        Optional<Costumer> costumerOptional = costumerService.findByEmail(email);
+        if (costumerOptional.isEmpty()) {
             throw new BadRequestException("Costumer not found");
         }
-        return new ResponseEntity<>(costumer, HttpStatus.OK);
+        return new ResponseEntity<>(costumerOptional.get(), HttpStatus.OK);
     }
 }
