@@ -31,6 +31,8 @@ class CostumerControllerTest {
     void setup() {
         BDDMockito.when(costumerServiceMock.findByEmail(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
+        BDDMockito.when(costumerServiceMock.findByCpf(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
     }
 
     @Test
@@ -56,6 +58,31 @@ class CostumerControllerTest {
 
         Assertions.assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(() -> costumerController.findByEmail("email not found"));
+    }
+
+    @Test
+    @DisplayName("findByCpf returns a costumer when successful")
+    void findByCpf_ReturnsACostumer_WhenSuccessful() {
+        Costumer costumer = CostumerCreator.createValidCostumer();
+        ResponseEntity<?> response = costumerController.findByCpf(costumer.getCpf());
+
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getStatusCode())
+                .isNotNull()
+                .isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(response.getBody())
+                .isNotNull()
+                .isEqualTo(costumer);
+    }
+
+    @Test
+    @DisplayName("findByCpf throws BadRequest when costumer is not found")
+    void findByCpf_ThrowsBadRequest_WhenCostumerIsNotFound() {
+        BDDMockito.when(costumerServiceMock.findByCpf(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(() -> costumerController.findByCpf("cpf not found"));
     }
 
 }
