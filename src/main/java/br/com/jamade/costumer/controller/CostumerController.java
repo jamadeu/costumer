@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("costumers")
@@ -33,11 +32,7 @@ public class CostumerController {
         if (email == null) {
             throw new BadRequestException("Email can not be null");
         }
-        Optional<Costumer> costumerOptional = costumerService.findByEmail(email);
-        if (costumerOptional.isEmpty()) {
-            throw new BadRequestException("Costumer not found");
-        }
-        return new ResponseEntity<>(costumerOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(costumerService.findByEmail(email), HttpStatus.OK);
     }
 
     @GetMapping("/find-by-cpf/{cpf}")
@@ -52,11 +47,7 @@ public class CostumerController {
         if (cpf == null) {
             throw new BadRequestException("Cpf can not be null");
         }
-        Optional<Costumer> costumerOptional = costumerService.findByCpf(cpf);
-        if (costumerOptional.isEmpty()) {
-            throw new BadRequestException("Costumer not found");
-        }
-        return new ResponseEntity<>(costumerOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(costumerService.findByCpf(cpf), HttpStatus.OK);
     }
 
     @PostMapping
