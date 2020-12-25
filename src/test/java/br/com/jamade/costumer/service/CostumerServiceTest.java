@@ -38,51 +38,45 @@ class CostumerServiceTest {
     }
 
     @Test
-    @DisplayName("findByEmail returns an optional of costumer when successful")
-    void findByEmail_ReturnsAnOptionalOfCostumer_WhenSuccessful() {
+    @DisplayName("findByEmail returns a costumer when successful")
+    void findByEmail_ReturnsCostumer_WhenSuccessful() {
         Costumer costumer = CostumerCreator.createValidCostumer();
-        Optional<Costumer> optionalCostumer = costumerService.findByEmail(costumer.getEmail());
+        Costumer foundedCostumer = costumerService.findByEmail(costumer.getEmail());
 
-        Assertions.assertThat(optionalCostumer)
+        Assertions.assertThat(foundedCostumer)
                 .isNotNull()
-                .isNotEmpty()
-                .contains(costumer);
+                .isEqualTo(costumer);
     }
 
     @Test
-    @DisplayName("findByEmail returns an empty optional when costumer is not found")
-    void findByEmail_ReturnsAnEmptyOptional_WhenCostumerIsNotFound() {
+    @DisplayName("findByEmail throws BadRequestException when costumer is not found")
+    void findByEmail_ThrowsBadRequestException_WhenCostumerIsNotFound() {
         BDDMockito.when(costumerRepositoryMock.findByEmail(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.empty());
-        Optional<Costumer> optionalCostumer = costumerService.findByEmail("costumer not found");
 
-        Assertions.assertThat(optionalCostumer)
-                .isNotNull()
-                .isEmpty();
+        Assertions.assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(() -> costumerService.findByEmail("costumer not found"));
     }
 
     @Test
-    @DisplayName("findByCpf returns an optional of costumer when successful")
-    void findByCpf_ReturnsAnOptionalOfCostumer_WhenSuccessful() {
+    @DisplayName("findByCpf returns a costumer when successful")
+    void findByCpf_ReturnsCostumer_WhenSuccessful() {
         Costumer costumer = CostumerCreator.createValidCostumer();
-        Optional<Costumer> optionalCostumer = costumerService.findByCpf(costumer.getCpf());
+        Costumer foundedCostumer = costumerService.findByCpf(costumer.getCpf());
 
-        Assertions.assertThat(optionalCostumer)
+        Assertions.assertThat(foundedCostumer)
                 .isNotNull()
-                .isNotEmpty()
-                .contains(costumer);
+                .isEqualTo(costumer);
     }
 
     @Test
-    @DisplayName("findByCpf returns an empty optional when costumer is not found")
+    @DisplayName("findByCpf thorws BadRequestException when costumer is not found")
     void findByCpf_ReturnsAnEmptyOptional_WhenCostumerIsNotFound() {
         BDDMockito.when(costumerRepositoryMock.findByCpf(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.empty());
-        Optional<Costumer> optionalCostumer = costumerService.findByCpf("costumer not found");
 
-        Assertions.assertThat(optionalCostumer)
-                .isNotNull()
-                .isEmpty();
+        Assertions.assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(() -> costumerService.findByCpf("costumer not found"));
     }
 
     @Test
@@ -116,6 +110,4 @@ class CostumerServiceTest {
         Assertions.assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(() -> costumerService.create(newCostumerRequest));
     }
-
-
 }
