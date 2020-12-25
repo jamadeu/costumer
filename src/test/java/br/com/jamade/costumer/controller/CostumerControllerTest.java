@@ -17,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Optional;
-
 @ExtendWith(SpringExtension.class)
 class CostumerControllerTest {
     @InjectMocks
@@ -30,9 +28,9 @@ class CostumerControllerTest {
     @BeforeEach
     void setup() {
         BDDMockito.when(costumerServiceMock.findByEmail(ArgumentMatchers.anyString()))
-                .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
+                .thenReturn(CostumerCreator.createValidCostumer());
         BDDMockito.when(costumerServiceMock.findByCpf(ArgumentMatchers.anyString()))
-                .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
+                .thenReturn(CostumerCreator.createValidCostumer());
     }
 
     @Test
@@ -51,20 +49,17 @@ class CostumerControllerTest {
     }
 
     @Test
-    @DisplayName("findByEmail throws BadRequest when costumer is not found")
-    void findByEmail_ThrowsBadRequest_WhenCostumerIsNotFound() {
-        BDDMockito.when(costumerServiceMock.findByEmail(ArgumentMatchers.anyString()))
-                .thenReturn(Optional.empty());
-
+    @DisplayName("findByEmail throws BadRequest when email is null")
+    void findByEmail_ThrowsBadRequest_WhenEmailIsNull() {
         Assertions.assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> costumerController.findByEmail("email not found"));
+                .isThrownBy(() -> costumerController.findByEmail(null));
     }
 
     @Test
     @DisplayName("findByCpf returns a costumer when successful")
     void findByCpf_ReturnsACostumer_WhenSuccessful() {
         Costumer costumer = CostumerCreator.createValidCostumer();
-        ResponseEntity<?> response = costumerController.findByCpf(costumer.getCpf());
+        ResponseEntity<Costumer> response = costumerController.findByCpf(costumer.getCpf());
 
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getStatusCode())
@@ -76,13 +71,12 @@ class CostumerControllerTest {
     }
 
     @Test
-    @DisplayName("findByCpf throws BadRequest when costumer is not found")
+    @DisplayName("findByCpf throws BadRequest when cpf is null")
     void findByCpf_ThrowsBadRequest_WhenCostumerIsNotFound() {
-        BDDMockito.when(costumerServiceMock.findByCpf(ArgumentMatchers.anyString()))
-                .thenReturn(Optional.empty());
-
         Assertions.assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> costumerController.findByCpf("cpf not found"));
+                .isThrownBy(() -> costumerController.findByCpf(null));
     }
+
+
 
 }
