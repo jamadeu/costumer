@@ -28,6 +28,8 @@ class CostumerServiceTest {
     void setup() {
         BDDMockito.when(costumerRepositoryMock.findByEmail(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
+        BDDMockito.when(costumerRepositoryMock.findByCpf(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
     }
 
     @Test
@@ -48,6 +50,30 @@ class CostumerServiceTest {
         BDDMockito.when(costumerRepositoryMock.findByEmail(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.empty());
         Optional<Costumer> optionalCostumer = costumerService.findByEmail("costumer not found");
+
+        Assertions.assertThat(optionalCostumer)
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("findByCpf returns an optional of costumer when successful")
+    void findByCpf_ReturnsAnOptionalOfCostumer_WhenSuccessful() {
+        Costumer costumer = CostumerCreator.createValidCostumer();
+        Optional<Costumer> optionalCostumer = costumerService.findByCpf(costumer.getCpf());
+
+        Assertions.assertThat(optionalCostumer)
+                .isNotNull()
+                .isNotEmpty()
+                .contains(costumer);
+    }
+
+    @Test
+    @DisplayName("findByCpf returns an empty optional when costumer is not found")
+    void findByCpf_ReturnsAnEmptyOptional_WhenCostumerIsNotFound() {
+        BDDMockito.when(costumerRepositoryMock.findByCpf(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.empty());
+        Optional<Costumer> optionalCostumer = costumerService.findByCpf("costumer not found");
 
         Assertions.assertThat(optionalCostumer)
                 .isNotNull()
