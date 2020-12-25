@@ -1,8 +1,11 @@
 package br.com.jamade.costumer.service;
 
 import br.com.jamade.costumer.domain.Costumer;
+import br.com.jamade.costumer.exception.BadRequestException;
 import br.com.jamade.costumer.repository.CostumerRepository;
+import br.com.jamade.costumer.requests.NewCostumerRequest;
 import br.com.jamade.costumer.util.CostumerCreator;
+import br.com.jamade.costumer.util.NewCostumerRequestCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +33,8 @@ class CostumerServiceTest {
                 .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
         BDDMockito.when(costumerRepositoryMock.findByCpf(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
+        BDDMockito.when(costumerRepositoryMock.save(ArgumentMatchers.any(Costumer.class)))
+                .thenReturn(CostumerCreator.createValidCostumer());
     }
 
     @Test
@@ -79,4 +84,38 @@ class CostumerServiceTest {
                 .isNotNull()
                 .isEmpty();
     }
+
+    @Test
+    @DisplayName("create returns a costumer when successful")
+    void create_ReturnsCostumer_WhenSuccessful() {
+        BDDMockito.when(costumerRepositoryMock.findByEmail(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.empty());
+        BDDMockito.when(costumerRepositoryMock.findByCpf(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.empty());
+        Costumer costumer = CostumerCreator.createValidCostumer();
+        Costumer createdCostumer = costumerService.create(NewCostumerRequestCreator.createNewCostumerRequest());
+
+        Assertions.assertThat(createdCostumer).isNotNull()
+                .isEqualTo(costumer);
+    }
+
+    @Test
+    @DisplayName("create throws BadRequestException when email already in use")
+    void create_ThrowsBadRequestException_WhenEmailAlreadyInUse() {
+        NewCostumerRequest newCostumerRequest = NewCostumerRequestCreator.createNewCostumerRequest();
+
+        Assertions.assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(() -> costumerService.create(newCostumerRequest));
+    }
+
+    @Test
+    @DisplayName("create throws BadRequestException when cpf already in use")
+    void create_ThrowsBadRequestException_WhenCpfAlreadyInUse() {
+        NewCostumerRequest newCostumerRequest = NewCostumerRequestCreator.createNewCostumerRequest();
+
+        Assertions.assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(() -> costumerService.create(newCostumerRequest));
+    }
+
+
 }
