@@ -2,8 +2,10 @@ package br.com.jamade.costumer.controller;
 
 import br.com.jamade.costumer.domain.Costumer;
 import br.com.jamade.costumer.exception.BadRequestException;
+import br.com.jamade.costumer.requests.NewCostumerRequest;
 import br.com.jamade.costumer.service.CostumerService;
 import br.com.jamade.costumer.util.CostumerCreator;
+import br.com.jamade.costumer.util.NewCostumerRequestCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +32,8 @@ class CostumerControllerTest {
         BDDMockito.when(costumerServiceMock.findByEmail(ArgumentMatchers.anyString()))
                 .thenReturn(CostumerCreator.createValidCostumer());
         BDDMockito.when(costumerServiceMock.findByCpf(ArgumentMatchers.anyString()))
+                .thenReturn(CostumerCreator.createValidCostumer());
+        BDDMockito.when(costumerServiceMock.create(ArgumentMatchers.any(NewCostumerRequest.class)))
                 .thenReturn(CostumerCreator.createValidCostumer());
     }
 
@@ -78,5 +82,16 @@ class CostumerControllerTest {
     }
 
 
+    @Test
+    @DisplayName("create returns a new costumer when successful")
+    void create_ReturnsNewCostumer_WhenSuccessful() {
+        ResponseEntity<Costumer> response = costumerController.create(NewCostumerRequestCreator.createNewCostumerRequest());
+        Costumer createdCostumer = response.getBody();
 
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Assertions.assertThat(createdCostumer)
+                .isNotNull()
+                .isEqualTo(CostumerCreator.createValidCostumer());
+    }
 }
