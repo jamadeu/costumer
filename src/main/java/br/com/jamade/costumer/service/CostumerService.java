@@ -14,7 +14,7 @@ public class CostumerService {
 
     public Costumer findByEmail(String email) {
         return costumerRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("Email already in use"));
+                .orElseThrow(() -> new BadRequestException("Costumer is not found"));
     }
 
     public Costumer findByCpf(String cpf) {

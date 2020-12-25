@@ -14,4 +14,13 @@ public class CostumerCreator {
                 .dateOfBirth(LocalDateTime.of(2000, 12, 12, 12, 12))
                 .build();
     }
+
+    public static Costumer createCostumerToBeSaved() {
+        return Costumer.builder()
+                .name("Costumer")
+                .cpf("376.078.410-08")
+                .email("costumer@test.com")
+                .dateOfBirth(LocalDateTime.of(2000, 12, 12, 12, 12))
+                .build();
+    }
 }
