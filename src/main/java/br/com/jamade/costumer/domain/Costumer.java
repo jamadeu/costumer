@@ -1,10 +1,7 @@
 package br.com.jamade.costumer.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.Entity;
@@ -17,7 +14,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
