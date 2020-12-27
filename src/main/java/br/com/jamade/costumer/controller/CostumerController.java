@@ -20,7 +20,7 @@ import javax.validation.Valid;
 public class CostumerController {
     private final CostumerService costumerService;
 
-    @GetMapping("/find-by-email/{email}")
+    @GetMapping("/check-email-used/{email}")
     @Operation(summary = "Find costumer by email",
             tags = {"costumers"}
     )
@@ -32,7 +32,7 @@ public class CostumerController {
         if (email == null) {
             throw new BadRequestException("Email can not be null");
         }
-        return new ResponseEntity<>(costumerService.findByEmail(email), HttpStatus.OK);
+        return costumerService.findByEmail(email);
     }
 
     @GetMapping("/find-by-cpf/{cpf}")
