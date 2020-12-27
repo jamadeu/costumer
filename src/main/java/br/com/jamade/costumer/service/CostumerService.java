@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 public class CostumerService {
     private final CostumerRepository costumerRepository;
 
-    public ResponseEntity<String> findByEmail(String email) {
+    public ResponseEntity<String> checkEmail(String email) {
         if (costumerRepository.findByEmail(email).isPresent()) {
-            throw new BadRequestException("Costumer is not found");
+            throw new BadRequestException(email + " is already in use");
         }
         return new ResponseEntity<>(email + " not in use", HttpStatus.OK);
     }
