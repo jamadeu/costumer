@@ -35,19 +35,19 @@ public class CostumerController {
         return costumerService.findByEmail(email);
     }
 
-    @GetMapping("/find-by-cpf/{cpf}")
-    @Operation(summary = "Find costumer by cpf",
+    @GetMapping("/check-cpf-used/{cpf}")
+    @Operation(summary = "Check id cpf is in use",
             tags = {"costumers"}
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successful operation"),
-            @ApiResponse(responseCode = "400", description = "When costumer does not found")
+            @ApiResponse(responseCode = "400", description = "When cpf is in use")
     })
-    public ResponseEntity<Costumer> findByCpf(@PathVariable String cpf) {
+    public ResponseEntity<String> checkCpf(@PathVariable String cpf) {
         if (cpf == null) {
             throw new BadRequestException("Cpf can not be null");
         }
-        return new ResponseEntity<>(costumerService.findByCpf(cpf), HttpStatus.OK);
+        return costumerService.findByCpf(cpf);
     }
 
     @PostMapping
