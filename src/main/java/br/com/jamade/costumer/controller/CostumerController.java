@@ -26,7 +26,7 @@ public class CostumerController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successful operation"),
-            @ApiResponse(responseCode = "400", description = "When costumer does not found")
+            @ApiResponse(responseCode = "400", description = "When email is in use")
     })
     public ResponseEntity<String> checkEmail(@PathVariable String email) {
         if (email == null) {
