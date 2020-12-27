@@ -51,8 +51,8 @@ class CostumerServiceTest {
     }
 
     @Test
-    @DisplayName("findByEmail throws BadRequestException when email already in use")
-    void findByEmail_ThrowsBadRequestException_WhenEmailIsAlreadyInUse() {
+    @DisplayName("checkEmail throws BadRequestException when email already in use")
+    void checkEmail_ThrowsBadRequestException_WhenEmailIsAlreadyInUse() {
         Costumer costumer = CostumerCreator.createValidCostumer();
         BDDMockito.when(costumerRepositoryMock.findByEmail(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.of(costumer));
