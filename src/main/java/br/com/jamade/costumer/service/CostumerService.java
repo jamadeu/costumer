@@ -5,6 +5,8 @@ import br.com.jamade.costumer.exception.BadRequestException;
 import br.com.jamade.costumer.repository.CostumerRepository;
 import br.com.jamade.costumer.requests.NewCostumerRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,9 +14,10 @@ import org.springframework.stereotype.Service;
 public class CostumerService {
     private final CostumerRepository costumerRepository;
 
-    public Costumer findByEmail(String email) {
-        return costumerRepository.findByEmail(email)
+    public ResponseEntity<Costumer> findByEmail(String email) {
+        Costumer costumer = costumerRepository.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException("Costumer is not found"));
+        return new ResponseEntity<>(costumer, HttpStatus.OK);
     }
 
     public Costumer findByCpf(String cpf) {
