@@ -47,7 +47,7 @@ public class CostumerController {
         if (cpf == null) {
             throw new BadRequestException("Cpf can not be null");
         }
-        return costumerService.findByCpf(cpf);
+        return costumerService.checkCpf(cpf);
     }
 
     @PostMapping
