@@ -39,7 +39,7 @@ class CostumerControllerTest {
 
     @Test
     @DisplayName("checkEmail returns returns status code OK when email is not in use")
-    void findByEmail_ReturnsStatusCodeOk_WhenEmailIsNotInUse() {
+    void checkEmail_ReturnsStatusCodeOk_WhenEmailIsNotInUse() {
         ResponseEntity<?> response = costumerController.checkEmail("email@test.com");
 
         Assertions.assertThat(response).isNotNull();
@@ -48,7 +48,7 @@ class CostumerControllerTest {
                 .isEqualTo(HttpStatus.OK);
         Assertions.assertThat(response.getBody())
                 .isNotNull()
-                .isEqualTo("email@test.com not in use");
+                .isEqualTo("email@test.com is not in use");
     }
 
     @Test

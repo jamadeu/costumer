@@ -41,12 +41,12 @@ class CostumerServiceTest {
 
     @Test
     @DisplayName("checkEmail returns status code OK when email is not in use")
-    void findByEmail_ReturnsStatusCodeOk_WhenEmailIsNotInUse() {
+    void checkEmail_ReturnsStatusCodeOk_WhenEmailIsNotInUse() {
         ResponseEntity<String> response = costumerService.checkEmail("email@test.com");
 
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(response.getBody()).isEqualTo("email@test.com not in use");
+        Assertions.assertThat(response.getBody()).isEqualTo("email@test.com is not in use");
 
     }
 
@@ -69,7 +69,7 @@ class CostumerServiceTest {
 
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(response.getBody()).isEqualTo("265.075.120-79 not in use");
+        Assertions.assertThat(response.getBody()).isEqualTo("265.075.120-79 is not in use");
     }
 
     @Test
@@ -81,7 +81,7 @@ class CostumerServiceTest {
         String cpf = costumer.getCpf();
 
         Assertions.assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> costumerService.checkEmail(cpf));
+                .isThrownBy(() -> costumerService.checkCpf(cpf));
     }
 
     @Test
@@ -101,6 +101,8 @@ class CostumerServiceTest {
     @Test
     @DisplayName("create throws BadRequestException when email already in use")
     void create_ThrowsBadRequestException_WhenEmailAlreadyInUse() {
+        BDDMockito.when(costumerRepositoryMock.findByEmail(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
         NewCostumerRequest newCostumerRequest = NewCostumerRequestCreator.createNewCostumerRequest();
 
         Assertions.assertThatExceptionOfType(BadRequestException.class)
@@ -110,6 +112,8 @@ class CostumerServiceTest {
     @Test
     @DisplayName("create throws BadRequestException when cpf already in use")
     void create_ThrowsBadRequestException_WhenCpfAlreadyInUse() {
+        BDDMockito.when(costumerRepositoryMock.findByCpf(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.of(CostumerCreator.createValidCostumer()));
         NewCostumerRequest newCostumerRequest = NewCostumerRequestCreator.createNewCostumerRequest();
 
         Assertions.assertThatExceptionOfType(BadRequestException.class)

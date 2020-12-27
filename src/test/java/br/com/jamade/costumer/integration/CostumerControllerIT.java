@@ -30,21 +30,21 @@ class CostumerControllerIT {
     private CostumerRepository costumerRepository;
 
     @Test
-    @DisplayName("findByEmail returns costumer when successful")
-    void findById_ReturnsCostumer_WhenSuccessful() {
-        Costumer savedCostumer = costumerRepository.save(CostumerCreator.createCostumerToBeSaved());
-        String url = String.format("/costumers/find-by-email/%s", savedCostumer.getEmail());
-        ResponseEntity<Costumer> response = testRestTemplate.getForEntity(url, Costumer.class);
+    @DisplayName("checkEmail returns status code OK when email is not in use")
+    void checkEmail_ReturnsStatusCodeOk_WhenEmailIsNotInUse() {
+        String url = "/costumers/check-email-used/email@test.com";
+        ResponseEntity<String> response = testRestTemplate.getForEntity(url, String.class);
 
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(response.getBody()).isEqualTo(savedCostumer);
+        Assertions.assertThat(response.getBody()).isEqualTo("email@test.com is not in use");
     }
 
     @Test
-    @DisplayName("findByEmail returns BadRequest when costumer is not found")
-    void findById_ReturnsBadRequest_WhenCostumerIsNotFound() {
-        String url = String.format("/costumers/find-by-email/%s", "email-not-exists");
+    @DisplayName("checkEmail returns BadRequest when email already in use")
+    void checkEmail_ReturnsBadRequest_WhenEmailIsAlreadyInUse() {
+        Costumer costumer = costumerRepository.save(CostumerCreator.createCostumerToBeSaved());
+        String url = String.format("/costumers/check-email-used/%s", costumer.getEmail());
         ResponseEntity<BadRequestException> response = testRestTemplate.exchange(url,
                 HttpMethod.GET, null, BadRequestException.class);
 
@@ -53,21 +53,21 @@ class CostumerControllerIT {
     }
 
     @Test
-    @DisplayName("findByCpf returns costumer when successful")
-    void findByCpf_ReturnsCostumer_WhenSuccessful() {
-        Costumer savedCostumer = costumerRepository.save(CostumerCreator.createCostumerToBeSaved());
-        String url = String.format("/costumers/find-by-cpf/%s", savedCostumer.getCpf());
-        ResponseEntity<Costumer> response = testRestTemplate.getForEntity(url, Costumer.class);
+    @DisplayName("checkCpf returns status code OK when cpf is not in use")
+    void checkCpf_ReturnsStatusCodeOk_WhenCpfIsNotInUse() {
+        String url = "/costumers/check-cpf-used/265.075.120-79";
+        ResponseEntity<String> response = testRestTemplate.getForEntity(url, String.class);
 
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(response.getBody()).isEqualTo(savedCostumer);
+        Assertions.assertThat(response.getBody()).isEqualTo("265.075.120-79 is not in use");
     }
 
     @Test
-    @DisplayName("findByCpf returns BadRequest when costumer is not found")
-    void findByCpf_ReturnsBadRequest_WhenCostumerIsNotFound() {
-        String url = String.format("/costumers/find-by-cpf/%s", "cpf-not-exists");
+    @DisplayName("checkCpf returns BadRequest when cpf already in use")
+    void checkCpf_ReturnsBadRequest_WhenCpfIsAlreadyInUse() {
+        Costumer savedCostumer = costumerRepository.save(CostumerCreator.createCostumerToBeSaved());
+        String url = String.format("/costumers/check-cpf-used/%s", savedCostumer.getCpf());
         ResponseEntity<BadRequestException> response = testRestTemplate.exchange(url,
                 HttpMethod.GET, null, BadRequestException.class);
 

@@ -18,14 +18,14 @@ public class CostumerService {
         if (costumerRepository.findByEmail(email).isPresent()) {
             throw new BadRequestException(email + " is already in use");
         }
-        return new ResponseEntity<>(email + " not in use", HttpStatus.OK);
+        return new ResponseEntity<>(email + " is not in use", HttpStatus.OK);
     }
 
     public ResponseEntity<String> checkCpf(String cpf) {
         if (costumerRepository.findByCpf(cpf).isPresent()) {
             throw new BadRequestException(cpf + " is already in use");
         }
-        return new ResponseEntity<>(cpf + " not in use", HttpStatus.OK);
+        return new ResponseEntity<>(cpf + " is not in use", HttpStatus.OK);
     }
 
     public Costumer create(NewCostumerRequest newCostumerRequest) {

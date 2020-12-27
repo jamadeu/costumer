@@ -6,6 +6,16 @@
 
 Projeto desenvolvido com [java](https://docs.oracle.com/en/java/javase/11/docs/api/index.html) + [spring](https://spring.io/).
 
+## Objetivo
+Cadastrar os dados pessoais de uma pessoa.
+
+Nome\
+E-mail\
+CPF\
+Data de nascimento\
+Todos os dados são obrigatórios.\
+Email e cpf devem ser únicos.
+
 ## Executando o projeto com Docker
 
 * Requisito: [Docker](https://docs.docker.com/get-docker/)
