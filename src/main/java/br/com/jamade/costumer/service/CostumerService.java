@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class CostumerService {
     private final CostumerRepository costumerRepository;
 
-    public ResponseEntity<?> findByEmail(String email) {
+    public ResponseEntity<String> findByEmail(String email) {
         if (costumerRepository.findByEmail(email).isPresent()) {
             throw new BadRequestException("Costumer is not found");
         }

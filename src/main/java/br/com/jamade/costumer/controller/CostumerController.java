@@ -21,14 +21,14 @@ public class CostumerController {
     private final CostumerService costumerService;
 
     @GetMapping("/check-email-used/{email}")
-    @Operation(summary = "Find costumer by email",
+    @Operation(summary = "Check if email is in used",
             tags = {"costumers"}
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "400", description = "When costumer does not found")
     })
-    public ResponseEntity<Costumer> findByEmail(@PathVariable String email) {
+    public ResponseEntity<String> checkEmail(@PathVariable String email) {
         if (email == null) {
             throw new BadRequestException("Email can not be null");
         }
