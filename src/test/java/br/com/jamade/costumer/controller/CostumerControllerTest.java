@@ -29,19 +29,18 @@ class CostumerControllerTest {
 
     @BeforeEach
     void setup() {
-        BDDMockito.when(costumerServiceMock.findByEmail(ArgumentMatchers.anyString()))
-                .thenReturn(CostumerCreator.createValidCostumer());
-        BDDMockito.when(costumerServiceMock.findByCpf(ArgumentMatchers.anyString()))
-                .thenReturn(CostumerCreator.createValidCostumer());
+        BDDMockito.when(costumerServiceMock.checkEmail(ArgumentMatchers.anyString()))
+                .thenReturn(new ResponseEntity<>("email@test.com is not in use", HttpStatus.OK));
+        BDDMockito.when(costumerServiceMock.checkCpf(ArgumentMatchers.anyString()))
+                .thenReturn(new ResponseEntity<>("265.075.120-79 not in use", HttpStatus.OK));
         BDDMockito.when(costumerServiceMock.create(ArgumentMatchers.any(NewCostumerRequest.class)))
                 .thenReturn(CostumerCreator.createValidCostumer());
     }
 
     @Test
-    @DisplayName("findByEmail returns a costumer when successful")
-    void findByEmail_ReturnsACostumer_WhenSuccessful() {
-        Costumer costumer = CostumerCreator.createValidCostumer();
-        ResponseEntity<?> response = costumerController.findByEmail(costumer.getEmail());
+    @DisplayName("checkEmail returns returns status code OK when email is not in use")
+    void findByEmail_ReturnsStatusCodeOk_WhenEmailIsNotInUse() {
+        ResponseEntity<?> response = costumerController.checkEmail("email@test.com");
 
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getStatusCode())
@@ -49,21 +48,20 @@ class CostumerControllerTest {
                 .isEqualTo(HttpStatus.OK);
         Assertions.assertThat(response.getBody())
                 .isNotNull()
-                .isEqualTo(costumer);
+                .isEqualTo("email@test.com not in use");
     }
 
     @Test
-    @DisplayName("findByEmail throws BadRequest when email is null")
+    @DisplayName("checkEmail throws BadRequest when email is null")
     void findByEmail_ThrowsBadRequest_WhenEmailIsNull() {
         Assertions.assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> costumerController.findByEmail(null));
+                .isThrownBy(() -> costumerController.checkEmail(null));
     }
 
     @Test
-    @DisplayName("findByCpf returns a costumer when successful")
-    void findByCpf_ReturnsACostumer_WhenSuccessful() {
-        Costumer costumer = CostumerCreator.createValidCostumer();
-        ResponseEntity<Costumer> response = costumerController.findByCpf(costumer.getCpf());
+    @DisplayName("checkCpf returns status code OK when cpf is not in use")
+    void checkCpf_ReturnsStatusCodeOk_WhenCpfIsNotInUse() {
+        ResponseEntity<String> response = costumerController.checkCpf("265.075.120-79");
 
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getStatusCode())
@@ -71,14 +69,14 @@ class CostumerControllerTest {
                 .isEqualTo(HttpStatus.OK);
         Assertions.assertThat(response.getBody())
                 .isNotNull()
-                .isEqualTo(costumer);
+                .isEqualTo("265.075.120-79 not in use");
     }
 
     @Test
     @DisplayName("findByCpf throws BadRequest when cpf is null")
     void findByCpf_ThrowsBadRequest_WhenCostumerIsNotFound() {
         Assertions.assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> costumerController.findByCpf(null));
+                .isThrownBy(() -> costumerController.checkCpf(null));
     }
 
 
