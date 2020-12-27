@@ -14,10 +14,11 @@ import org.springframework.stereotype.Service;
 public class CostumerService {
     private final CostumerRepository costumerRepository;
 
-    public ResponseEntity<Costumer> findByEmail(String email) {
-        Costumer costumer = costumerRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("Costumer is not found"));
-        return new ResponseEntity<>(costumer, HttpStatus.OK);
+    public ResponseEntity<?> findByEmail(String email) {
+        if (costumerRepository.findByEmail(email).isPresent()) {
+            throw new BadRequestException("Costumer is not found");
+        }
+        return new ResponseEntity<>(email + " not in use", HttpStatus.OK);
     }
 
     public Costumer findByCpf(String cpf) {
