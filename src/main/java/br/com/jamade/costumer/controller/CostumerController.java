@@ -32,7 +32,7 @@ public class CostumerController {
         if (email == null) {
             throw new BadRequestException("Email can not be null");
         }
-        return costumerService.findByEmail(email);
+        return costumerService.checkEmail(email);
     }
 
     @GetMapping("/check-cpf-used/{cpf}")
